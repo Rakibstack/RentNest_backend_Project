@@ -1,5 +1,4 @@
 import z from "zod";
-import { Role } from "../../../generated/prisma/enums";
 
 export const createUserSchema = z.object({
   name: z
@@ -8,7 +7,7 @@ export const createUserSchema = z.object({
     .min(1, "Name Is Required")
     .max(50, "Name cannot exceed 50 characters"),
 
-  email: z.string().trim().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")
@@ -17,5 +16,5 @@ export const createUserSchema = z.object({
      profileImage: z
     .string()
     .optional(),
-    role:z.nativeEnum(Role),
+    role:z.enum(["TENANT", "LANDLORD"]),
 });
