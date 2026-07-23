@@ -4,6 +4,7 @@ import cookiePerser from "cookie-parser"
 import config from "./config";
 import { notFoundRoute } from "./middleware/notFoundRoute";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { userRoutes } from "./module/user/user.route";
 
 const app: Application = expess();
 
@@ -19,6 +20,7 @@ app.use(cookiePerser())
 app.get('/',(req :Request,res:Response) => {
     res.send("Hello World")
 })
+app.use('/api/auth',userRoutes)
 
 
 app.use(notFoundRoute) 

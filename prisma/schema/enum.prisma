@@ -1,9 +1,9 @@
+
 enum Role {
     TENANT
     LANDLORD
     ADMIN
 }
-
 enum UserStatus {
     ACTIVE
     BLOCKED
