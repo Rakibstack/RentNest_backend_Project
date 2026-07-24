@@ -1,0 +1,17 @@
+model RentalRequest {
+    
+    id String @id @default(uuid())
+
+    tenantId String
+    tenant   User   @relation(fields: [tenantId], references: [id])
+
+    propertyId String
+    property   Property @relation(fields: [propertyId], references: [id])
+
+    status RentalRequestStatus
+    moveinDate DateTime
+    message  String?   @db.VarChar(255)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+}

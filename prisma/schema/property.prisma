@@ -1,0 +1,23 @@
+model Property {
+    id           String         @id @default(uuid())
+    title        String         @db.VarChar(255)
+    description  String         @db.Text
+    location     String         @db.VarChar(255)
+    rent         Int            @db.Integer
+    bedRoom      Int?
+    bathRooms    Int?
+    image        String[]
+    availability PropertyStatus @default(AVAILABLE)
+
+    authorId String
+    author User @relation(fields: [authorId],references: [id])
+
+    categoryId String
+    category Category @relation(fields: [categoryId],references: [id])
+
+    rentalRequest RentalRequest[]
+  
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

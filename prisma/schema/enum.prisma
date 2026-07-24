@@ -1,10 +1,27 @@
-
 enum Role {
     TENANT
     LANDLORD
     ADMIN
 }
+
 enum UserStatus {
     ACTIVE
     BLOCKED
+}
+
+enum PropertyStatus {
+    AVAILABLE
+    UNAVAILABLE
+}
+
+enum RentalRequestStatus {
+    PENDING
+
+    APPROVED
+
+    REJECTED
+
+    ACTIVE
+
+    COMPLETED
 }
