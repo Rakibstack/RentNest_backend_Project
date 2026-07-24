@@ -26,6 +26,22 @@ const createUser = catchAsync(
   },
 );
 
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+     
+     const userId = req.user?.id
+
+     const user = await userService.getMyProfile(userId as string)
+     sendResponse(res,{
+        success:true,
+        statusCode: httpstatus.OK,
+        message: 'User Profile Fatched Successfully',
+        data: user
+     })
+  },
+);
+
 export const userController = {
   createUser,
+  getMyProfile
 };
