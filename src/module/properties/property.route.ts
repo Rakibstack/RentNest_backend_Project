@@ -10,5 +10,10 @@ route.post(
   authMiddleware(Role.LANDLORD),
   propertyController.createProperty,
 );
+route.patch(
+  "/properties/:id",
+  authMiddleware(Role.LANDLORD),
+  propertyController.updateproperty,
+);
 
-export const propertyRoutes = route
+export const propertyRoutes = route;

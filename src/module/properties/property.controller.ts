@@ -3,7 +3,10 @@ import { catchAsync } from "../../utils/catchAsync";
 import { propertyService } from "./property.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpstatus from "http-status";
-import { createPropertySchema } from "./property.validation";
+import {
+  createPropertySchema,
+  updatePropertySchema,
+} from "./property.validation";
 
 const createProperty = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -30,6 +33,31 @@ const createProperty = catchAsync(
   },
 );
 
+const updateproperty = catchAsync(
+
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = updatePropertySchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        errors: result.error.flatten().fieldErrors,
+      });
+    }
+
+    const propertyId = req.params?.id as string;
+    const authorId = req.user?.id as string;
+
+    const updateproperty = await propertyService.updatePropertyIntoDb(
+      propertyId,
+      authorId,
+      result.data,
+    );
+    return updateproperty;
+  },
+);
+
 export const propertyController = {
   createProperty,
+  updateproperty
 };
