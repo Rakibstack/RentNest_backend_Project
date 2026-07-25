@@ -1,5 +1,5 @@
 model RentalRequest {
-    
+
     id String @id @default(uuid())
 
     tenantId String
@@ -8,10 +8,13 @@ model RentalRequest {
     propertyId String
     property   Property @relation(fields: [propertyId], references: [id])
 
-    status RentalRequestStatus
-    moveinDate DateTime
+    status RentalRequestStatus @default(PENDING)
+    moveInDate DateTime
     message  String?   @db.VarChar(255)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    @@unique([tenantId,propertyId])
+    @@index([tenantId,propertyId])
+    @@map("rentalRequests")
 }

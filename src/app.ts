@@ -6,6 +6,7 @@ import { notFoundRoute } from "./middleware/notFoundRoute";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { userRoutes } from "./module/user/user.route";
 import { authRoutes } from "./module/auth/auth.route";
+import { propertyRoutes } from "./module/properties/property.route";
 
 const app: Application = expess();
 
@@ -23,6 +24,7 @@ app.get('/',(req :Request,res:Response) => {
 })
 app.use('/api/auth',userRoutes)
 app.use('/api/auth',authRoutes)
+app.use('/api/landlord',propertyRoutes)
 
 
 app.use(notFoundRoute) 
