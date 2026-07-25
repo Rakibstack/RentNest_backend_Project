@@ -10,7 +10,7 @@ model Property {
     availability PropertyStatus @default(AVAILABLE)
 
     authorId String
-    author User @relation(fields: [authorId],references: [id])
+    author User @relation(fields: [authorId],references: [id],onDelete:Cascade)
 
     categoryId String
     category Category @relation(fields: [categoryId],references: [id])

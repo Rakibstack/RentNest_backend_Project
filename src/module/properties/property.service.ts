@@ -24,28 +24,47 @@ const updatePropertyIntoDb = async (
   authorId: string,
   payload: updatePropertyPayload,
 ) => {
+  const property = await prisma.property.findUniqueOrThrow({
+    where: {
+      id: propertyId,
+    },
+  });
 
-    const property= await prisma.property.findUniqueOrThrow({
-        where: {
-            id: propertyId
-        }
-    })
+  if (property.authorId !== authorId) {
+    throw new Error("You Are Not The Owner Of This Property.");
+  }
 
-    if(property.authorId !== authorId){
-        throw new Error('You Are Not The Owner Of This Property.')
-    }
+  const updateProperty = await prisma.property.update({
+    where: {
+      id: propertyId,
+    },
+    data: payload,
+  });
 
-    const updateProperty = await prisma.property.update({
-        where:{
-            id: propertyId
-        },
-        data:payload,
-    })
+  return updateProperty;
+};
 
-    return updateProperty;
+const deletePropertyIntoDB = async (propertyId: string, authorId: string) => {
+  const propertyExists = await prisma.property.findUniqueOrThrow({
+    where: {
+      id: propertyId,
+    },
+  });
+
+  if (propertyExists.authorId !== authorId) {
+    throw new Error("You Are Not The Owner Of This Property");
+  }
+
+  const result = await prisma.property.delete({
+    where: {
+      id: propertyId,
+    },
+  });
+  return result;
 };
 
 export const propertyService = {
   createPropertiesIntoDB,
-  updatePropertyIntoDb
+  updatePropertyIntoDb,
+  deletePropertyIntoDB,
 };

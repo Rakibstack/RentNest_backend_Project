@@ -34,7 +34,6 @@ const createProperty = catchAsync(
 );
 
 const updateproperty = catchAsync(
-
   async (req: Request, res: Response, next: NextFunction) => {
     const result = updatePropertySchema.safeParse(req.body);
     if (!result.success) {
@@ -53,11 +52,36 @@ const updateproperty = catchAsync(
       authorId,
       result.data,
     );
-    return updateproperty;
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Property Update Successfully",
+      data: updateproperty,
+    });
+  },
+);
+
+const deleteProperty = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const propertyId = req.params?.id as string;
+    const authorId = req.user?.id as string;
+
+    const result = await propertyService.deletePropertyIntoDB(
+      propertyId,
+      authorId,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Property Delete Successfully",
+      data: result,
+    });
   },
 );
 
 export const propertyController = {
   createProperty,
-  updateproperty
+  updateproperty,
+  deleteProperty
 };

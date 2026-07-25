@@ -3,10 +3,10 @@ model RentalRequest {
     id String @id @default(uuid())
 
     tenantId String
-    tenant   User   @relation(fields: [tenantId], references: [id])
+    tenant   User   @relation(fields: [tenantId], references: [id],onDelete: Cascade)
 
     propertyId String
-    property   Property @relation(fields: [propertyId], references: [id])
+    property   Property @relation(fields: [propertyId], references: [id],onDelete: Cascade)
 
     status RentalRequestStatus @default(PENDING)
     moveInDate DateTime
