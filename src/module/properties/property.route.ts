@@ -20,5 +20,10 @@ route.delete(
   authMiddleware(Role.LANDLORD),
   propertyController.deleteProperty,
 );
+route.patch(
+  "/properties/status/:id",
+  authMiddleware(Role.LANDLORD),
+  propertyController.setPropertyStatus,
+);
 
 export const propertyRoutes = route;

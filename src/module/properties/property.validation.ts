@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PropertyStatus } from "../../../generated/prisma/enums";
 
 export const createPropertySchema = z.object({
   title: z
@@ -31,6 +32,16 @@ export const createPropertySchema = z.object({
 
   categoryId: z.string("Invalid category id"),
 });
+
+ export const updateAvailabilitySchema = z.object({
+
+    availability:z.nativeEnum(PropertyStatus)
+
+});
+
+export type UpdateAvailabilityPayload =
+    z.infer<typeof updateAvailabilitySchema>;
+
 
 export const updatePropertySchema = createPropertySchema.partial();
 

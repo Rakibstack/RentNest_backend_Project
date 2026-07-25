@@ -5,6 +5,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpstatus from "http-status";
 import {
   createPropertySchema,
+  updateAvailabilitySchema,
   updatePropertySchema,
 } from "./property.validation";
 
@@ -80,8 +81,38 @@ const deleteProperty = catchAsync(
   },
 );
 
+const setPropertyStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const result = updateAvailabilitySchema.safeParse(req.body)
+     if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        errors: result.error.flatten().fieldErrors,
+      });
+    }
+    const propertyId = req.params?.id as string;
+    const authorId = req.user?.id as string;
+
+    const updatePropertyStatus = await propertyService.setPropertyStatus(
+      propertyId,
+      authorId,
+      result.data
+    );
+
+    sendResponse(res,{
+        success: true,
+        statusCode: httpstatus.OK,
+        message: 'property availability status update Successfully',
+        data: updatePropertyStatus
+    })
+  },
+);
+
 export const propertyController = {
   createProperty,
   updateproperty,
-  deleteProperty
+  deleteProperty,
+  setPropertyStatus
 };

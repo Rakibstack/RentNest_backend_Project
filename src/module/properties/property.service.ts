@@ -2,8 +2,10 @@ import { tr } from "zod/locales";
 import { prisma } from "../../lib/prisma";
 import {
   CreatePropertyPayload,
+  UpdateAvailabilityPayload,
   updatePropertyPayload,
 } from "./property.validation";
+import { PropertyStatus } from "../../../generated/prisma/enums";
 
 const createPropertiesIntoDB = async (
   authorId: string,
@@ -63,8 +65,35 @@ const deletePropertyIntoDB = async (propertyId: string, authorId: string) => {
   return result;
 };
 
+const setPropertyStatus = async (
+  propertyId: string,
+  authorId: string,
+  payload: UpdateAvailabilityPayload,
+) => {
+  const propertyExist = await prisma.property.findUniqueOrThrow({
+    where: {
+      id: propertyId,
+    },
+  });
+
+  if (propertyExist.authorId !== authorId) {
+    throw new Error("You Are Not The Owner Of This Property");
+  }
+
+  const result = await prisma.property.update({
+    where: {
+      id: propertyId,
+    },
+    data: {
+      availability:payload.availability
+    },
+  });
+  return result;
+};
+
 export const propertyService = {
   createPropertiesIntoDB,
   updatePropertyIntoDb,
   deletePropertyIntoDB,
+  setPropertyStatus,
 };
