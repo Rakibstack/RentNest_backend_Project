@@ -85,10 +85,24 @@ const setPropertyStatus = async (
       id: propertyId,
     },
     data: {
-      availability:payload.availability
+      availability: payload.availability,
     },
   });
   return result;
+};
+
+const getAllProperties = async () => {
+    
+  const properties = await prisma.property.findMany({
+    where: {
+      availability: "AVAILABLE",
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return properties;
 };
 
 export const propertyService = {
@@ -96,4 +110,5 @@ export const propertyService = {
   updatePropertyIntoDb,
   deletePropertyIntoDB,
   setPropertyStatus,
+  getAllProperties
 };

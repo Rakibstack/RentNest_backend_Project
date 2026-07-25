@@ -83,9 +83,8 @@ const deleteProperty = catchAsync(
 
 const setPropertyStatus = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
-    const result = updateAvailabilitySchema.safeParse(req.body)
-     if (!result.success) {
+    const result = updateAvailabilitySchema.safeParse(req.body);
+    if (!result.success) {
       return res.status(400).json({
         success: false,
         message: "Validation Error",
@@ -98,15 +97,29 @@ const setPropertyStatus = catchAsync(
     const updatePropertyStatus = await propertyService.setPropertyStatus(
       propertyId,
       authorId,
-      result.data
+      result.data,
     );
 
-    sendResponse(res,{
-        success: true,
-        statusCode: httpstatus.OK,
-        message: 'property availability status update Successfully',
-        data: updatePropertyStatus
-    })
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "property availability status update Successfully",
+      data: updatePropertyStatus,
+    });
+  },
+);
+
+const getAllProperties = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const properties =await propertyService.getAllProperties()
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Retrieves All Properties Successfully",
+      data: properties,
+    });
   },
 );
 
@@ -114,5 +127,6 @@ export const propertyController = {
   createProperty,
   updateproperty,
   deleteProperty,
-  setPropertyStatus
+  setPropertyStatus,
+  getAllProperties
 };

@@ -25,6 +25,7 @@ app.get('/',(req :Request,res:Response) => {
 app.use('/api/auth',userRoutes)
 app.use('/api/auth',authRoutes)
 app.use('/api/landlord',propertyRoutes)
+app.use('/api/properties',propertyRoutes)
 
 
 app.use(notFoundRoute) 

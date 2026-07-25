@@ -26,4 +26,7 @@ route.patch(
   propertyController.setPropertyStatus,
 );
 
+route.get('/',propertyController.getAllProperties)
+
+
 export const propertyRoutes = route;
