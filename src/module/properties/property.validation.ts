@@ -33,15 +33,20 @@ export const createPropertySchema = z.object({
   categoryId: z.string("Invalid category id"),
 });
 
- export const updateAvailabilitySchema = z.object({
+export const updateRentalRequestSchema = z.object({
+  status: z.enum(["APPROVED", "REJECTED"]),
+});
+export type updateRentalRequestPayload = z.infer<
+  typeof updateRentalRequestSchema
+>;
 
-    availability:z.nativeEnum(PropertyStatus)
-
+export const updateAvailabilitySchema = z.object({
+  availability: z.nativeEnum(PropertyStatus),
 });
 
-export type UpdateAvailabilityPayload =
-    z.infer<typeof updateAvailabilitySchema>;
-
+export type UpdateAvailabilityPayload = z.infer<
+  typeof updateAvailabilitySchema
+>;
 
 export const updatePropertySchema = createPropertySchema.partial();
 

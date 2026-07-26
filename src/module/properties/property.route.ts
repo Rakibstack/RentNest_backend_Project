@@ -33,5 +33,10 @@ route.get(
   authMiddleware(Role.LANDLORD),
   propertyController.getAllLandlordPropertyRequest,
 );
+route.patch(
+  "/requests/:id",
+  authMiddleware(Role.LANDLORD),
+  propertyController.updateRentalRequestStatus,
+);
 
 export const propertyRoutes = route;

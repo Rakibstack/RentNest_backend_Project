@@ -7,6 +7,7 @@ import {
   createPropertySchema,
   updateAvailabilitySchema,
   updatePropertySchema,
+  updateRentalRequestSchema,
 } from "./property.validation";
 
 const createProperty = catchAsync(
@@ -144,13 +145,41 @@ const getAllLandlordPropertyRequest = catchAsync(
 
     const result =
       await propertyService.getAllLandlordPropertyRequest(landlordId);
-      sendResponse(res,{
-        success:true,
-        statusCode:httpstatus.OK,
-        message: 'Get All Landlords Property Request Successfully',
-        data: result
-      })
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Get All Landlords Property Request Successfully",
+      data: result,
+    });
   },
+);
+
+const updateRentalRequestStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = updateRentalRequestSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation Error",
+        errors: result.error.flatten().fieldErrors,
+      });
+    }
+    const landlordId = req.user?.id as string;
+    const rentalRequestId = req.params?.id as string;
+
+    const updateRentalRequest = await propertyService.updateRentalRequestStatus(
+      rentalRequestId,
+      landlordId,
+      result.data,
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Update Rental Request Status Successfully",
+      data: updateRentalRequest,
+    });
+  },
+   
 );
 
 export const propertyController = {
@@ -160,5 +189,6 @@ export const propertyController = {
   setPropertyStatus,
   getAllProperties,
   getSingleProperty,
-  getAllLandlordPropertyRequest
+  getAllLandlordPropertyRequest,
+  updateRentalRequestStatus
 };

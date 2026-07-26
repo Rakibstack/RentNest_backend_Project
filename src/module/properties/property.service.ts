@@ -3,6 +3,7 @@ import {
   CreatePropertyPayload,
   UpdateAvailabilityPayload,
   updatePropertyPayload,
+  updateRentalRequestPayload,
 } from "./property.validation";
 import { IpropertyQuery } from "./property.interface";
 import { PropertyWhereInput } from "../../../generated/prisma/models";
@@ -196,15 +197,46 @@ const getSingleProperty = async (propertyId: string) => {
 const getAllLandlordPropertyRequest = async (landlordId: string) => {
   const result = await prisma.rentalRequest.findMany({
     where: {
-      property : {
-        authorId : landlordId
-      }
+      property: {
+        authorId: landlordId,
+      },
     },
-    // include: {
-    //   author: true
-    // }
   });
   return result;
+};
+
+const updateRentalRequestStatus = async (
+  rentalRequestId: string,
+  landlordId: string,
+  payload: updateRentalRequestPayload,
+) => {
+  const rentalRequestExists = await prisma.rentalRequest.findUniqueOrThrow({
+    where: {
+      id: rentalRequestId,
+    },
+    include: {
+      property: true,
+    },
+  });
+
+  if (rentalRequestExists.property.authorId !== landlordId) {
+    throw new Error("You Are Not The Owner Of This Property");
+  }
+
+  if (rentalRequestExists.status !== "PENDING") {
+    throw new Error("Rental request has already been processed.");
+  }
+
+  const updateRentalStatus = await prisma.rentalRequest.update({
+    where: {
+      id: rentalRequestId,
+    },
+    data: {
+      status: payload.status,
+    },
+  });
+
+  return updateRentalStatus;
 };
 
 export const propertyService = {
@@ -214,5 +246,6 @@ export const propertyService = {
   setPropertyStatus,
   getAllProperties,
   getSingleProperty,
-  getAllLandlordPropertyRequest
+  getAllLandlordPropertyRequest,
+  updateRentalRequestStatus
 };
