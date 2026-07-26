@@ -15,5 +15,10 @@ route.get(
   authMiddleware(Role.TENANT),
   rentalRequestController.getUserRentalRequest,
 );
+route.get(
+  "/:id",
+  authMiddleware(Role.TENANT),
+  rentalRequestController.getSingleRentalRequest,
+);
 
 export const rentalRequestRoutes = route;
