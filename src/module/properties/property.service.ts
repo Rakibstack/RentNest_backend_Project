@@ -193,6 +193,19 @@ const getSingleProperty = async (propertyId: string) => {
   return property;
 };
 
+const getAllLandlordPropertyRequest = async (landlordId: string) => {
+  const result = await prisma.rentalRequest.findMany({
+    where: {
+      property : {
+        authorId : landlordId
+      }
+    },
+    // include: {
+    //   author: true
+    // }
+  });
+  return result;
+};
 
 export const propertyService = {
   createPropertiesIntoDB,
@@ -201,4 +214,5 @@ export const propertyService = {
   setPropertyStatus,
   getAllProperties,
   getSingleProperty,
+  getAllLandlordPropertyRequest
 };

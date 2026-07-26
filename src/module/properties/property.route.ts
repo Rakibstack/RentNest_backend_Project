@@ -26,8 +26,12 @@ route.patch(
   propertyController.setPropertyStatus,
 );
 
-route.get('/',propertyController.getAllProperties)
-route.get('/:id',propertyController.getSingleProperty)
-
+route.get("/", propertyController.getAllProperties);
+route.get("/:id", propertyController.getSingleProperty);
+route.get(
+  "/requests/landlordsProperties",
+  authMiddleware(Role.LANDLORD),
+  propertyController.getAllLandlordPropertyRequest,
+);
 
 export const propertyRoutes = route;

@@ -138,6 +138,20 @@ const getSingleProperty = catchAsync(
   },
 );
 
+const getAllLandlordPropertyRequest = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const landlordId = req.user?.id as string;
+
+    const result =
+      await propertyService.getAllLandlordPropertyRequest(landlordId);
+      sendResponse(res,{
+        success:true,
+        statusCode:httpstatus.OK,
+        message: 'Get All Landlords Property Request Successfully',
+        data: result
+      })
+  },
+);
 
 export const propertyController = {
   createProperty,
@@ -146,4 +160,5 @@ export const propertyController = {
   setPropertyStatus,
   getAllProperties,
   getSingleProperty,
+  getAllLandlordPropertyRequest
 };
