@@ -135,25 +135,25 @@ const getAllProperties = async (query: IpropertyQuery) => {
       },
     });
   }
-   if(query.location){
+  if (query.location) {
     addConditions.push({
-      location: query.location
-    })
-   }
-   if(query.categoryId){
+      location: query.location,
+    });
+  }
+  if (query.categoryId) {
     addConditions.push({
-      categoryId: query.categoryId
-    })
-   }
-    addConditions.push({
-      availability: 'AVAILABLE'
-    })
+      categoryId: query.categoryId,
+    });
+  }
+  addConditions.push({
+    availability: "AVAILABLE",
+  });
 
-    const totalProperty = await prisma.property.count({
-      where: {
-       AND : addConditions
-      }
-    })
+  const totalProperty = await prisma.property.count({
+    where: {
+      AND: addConditions,
+    },
+  });
 
   const properties = await prisma.property.findMany({
     where: {
@@ -161,20 +161,37 @@ const getAllProperties = async (query: IpropertyQuery) => {
     },
     take: limit,
     skip: skip,
-
     orderBy: {
       createdAt: "desc",
     },
   });
   return {
-    data : properties,
+    data: properties,
     meta: {
-      page:page,
-      limit:limit,
-      total :totalProperty,
-      totalPage: Math.ceil(totalProperty/limit)
-    }
+      page: page,
+      limit: limit,
+      total: totalProperty,
+      totalPage: Math.ceil(totalProperty / limit),
+    },
   };
+};
+
+const getSingleProperty = async (propertyId: string) => {
+
+  const property = prisma.property.findFirstOrThrow({
+    where: {
+      id: propertyId,
+      availability: "AVAILABLE",
+    },
+    include: {
+      author: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+  });
+  return property
 };
 
 export const propertyService = {
@@ -183,4 +200,5 @@ export const propertyService = {
   deletePropertyIntoDB,
   setPropertyStatus,
   getAllProperties,
+  getSingleProperty
 };

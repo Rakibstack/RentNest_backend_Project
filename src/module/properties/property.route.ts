@@ -27,6 +27,7 @@ route.patch(
 );
 
 route.get('/',propertyController.getAllProperties)
+route.get('/:id',propertyController.getSingleProperty)
 
 
 export const propertyRoutes = route;

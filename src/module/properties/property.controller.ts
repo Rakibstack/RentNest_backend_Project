@@ -118,9 +118,24 @@ const getAllProperties = catchAsync(
       success: true,
       statusCode: httpstatus.OK,
       message: "Retrieves All Properties Successfully",
-      data:properties.data,
-      meta:properties.meta
+      data: properties.data,
+      meta: properties.meta,
     });
+  },
+);
+
+const getSingleProperty = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+     const propertyId = req.params?.id as string;
+
+     const result = await propertyService.getSingleProperty(propertyId)
+     sendResponse(res,{
+      success: true,
+      statusCode: httpstatus.OK,
+      message: 'Get Single Property Successfully',
+      data: result
+     })
   },
 );
 
@@ -130,4 +145,5 @@ export const propertyController = {
   deleteProperty,
   setPropertyStatus,
   getAllProperties,
+  getSingleProperty
 };
