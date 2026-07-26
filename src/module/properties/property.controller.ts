@@ -111,14 +111,15 @@ const setPropertyStatus = catchAsync(
 
 const getAllProperties = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
-    const properties =await propertyService.getAllProperties()
+    const query = req.query;
+    const properties = await propertyService.getAllProperties(query);
 
     sendResponse(res, {
       success: true,
       statusCode: httpstatus.OK,
       message: "Retrieves All Properties Successfully",
-      data: properties,
+      data:properties.data,
+      meta:properties.meta
     });
   },
 );
@@ -128,5 +129,5 @@ export const propertyController = {
   updateproperty,
   deleteProperty,
   setPropertyStatus,
-  getAllProperties
+  getAllProperties,
 };

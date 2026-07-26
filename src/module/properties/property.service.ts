@@ -1,11 +1,11 @@
-import { tr } from "zod/locales";
 import { prisma } from "../../lib/prisma";
 import {
   CreatePropertyPayload,
   UpdateAvailabilityPayload,
   updatePropertyPayload,
 } from "./property.validation";
-import { PropertyStatus } from "../../../generated/prisma/enums";
+import { IpropertyQuery } from "./property.interface";
+import { PropertyWhereInput } from "../../../generated/prisma/models";
 
 const createPropertiesIntoDB = async (
   authorId: string,
@@ -91,18 +91,90 @@ const setPropertyStatus = async (
   return result;
 };
 
-const getAllProperties = async () => {
-    
+const getAllProperties = async (query: IpropertyQuery) => {
+  const limit = query.limit ? Number(query.limit) : 5;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+
+  const addConditions: PropertyWhereInput[] = [];
+
+  if (query.searchTerm) {
+    addConditions.push({
+      OR: [
+        {
+          title: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+        {
+          location: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
+  }
+
+  if (query.minRent || query.maxRent) {
+    addConditions.push({
+      rent: {
+        ...(query.minRent && {
+          gte: Number(query.minRent),
+        }),
+        ...(query.maxRent && {
+          lte: Number(query.maxRent),
+        }),
+      },
+    });
+  }
+   if(query.location){
+    addConditions.push({
+      location: query.location
+    })
+   }
+   if(query.categoryId){
+    addConditions.push({
+      categoryId: query.categoryId
+    })
+   }
+    addConditions.push({
+      availability: 'AVAILABLE'
+    })
+
+    const totalProperty = await prisma.property.count({
+      where: {
+       AND : addConditions
+      }
+    })
+
   const properties = await prisma.property.findMany({
     where: {
-      availability: "AVAILABLE",
+      AND: addConditions,
     },
+    take: limit,
+    skip: skip,
 
     orderBy: {
       createdAt: "desc",
     },
   });
-  return properties;
+  return {
+    data : properties,
+    meta: {
+      page:page,
+      limit:limit,
+      total :totalProperty,
+      totalPage: Math.ceil(totalProperty/limit)
+    }
+  };
 };
 
 export const propertyService = {
@@ -110,5 +182,5 @@ export const propertyService = {
   updatePropertyIntoDb,
   deletePropertyIntoDB,
   setPropertyStatus,
-  getAllProperties
+  getAllProperties,
 };
