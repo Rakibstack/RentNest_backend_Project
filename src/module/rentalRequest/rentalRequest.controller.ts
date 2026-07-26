@@ -7,7 +7,6 @@ import { createRentalRequestSchema } from "./rental.validation";
 
 const createRentalRequest = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const result = createRentalRequestSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({
@@ -30,7 +29,21 @@ const createRentalRequest = catchAsync(
     });
   },
 );
+const getUserRentalRequest = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
 
- export const rentalRequestController = {
-    createRentalRequest
- }
+    const tenantId = req.user?.id as string;
+    const result = await rentalRequestService.getUserRentalRequest(tenantId)
+    sendResponse(res,{
+        success: true,
+        statusCode: httpstatus.OK,
+        message: 'Retrieves User All Rental Request',
+        data: result
+    })
+  },
+);
+
+export const rentalRequestController = {
+  createRentalRequest,
+  getUserRentalRequest
+};

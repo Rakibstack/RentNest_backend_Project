@@ -21,9 +21,29 @@ const createRentalRequest = async (
       tenantId,
     },
   });
-   return createRequest
+  return createRequest;
 };
 
- export const rentalRequestService = {
-    createRentalRequest
- }
+const getUserRentalRequest = async (tenantId: string) => {
+  const result = await prisma.rentalRequest.findMany({
+    where: {
+      tenantId,
+    },
+    include: {
+      property: {
+        select: {
+          title: true,
+          description: true,
+          location: true,
+          rent: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+
+export const rentalRequestService = {
+  createRentalRequest,
+  getUserRentalRequest,
+};

@@ -7,9 +7,13 @@ const route = Router();
 
 route.post(
   "/",
-  authMiddleware(Role.TENANT,),
+  authMiddleware(Role.TENANT),
   rentalRequestController.createRentalRequest,
 );
+route.get(
+  "/",
+  authMiddleware(Role.TENANT),
+  rentalRequestController.getUserRentalRequest,
+);
 
-
- export const rentalRequestRoutes = route
+export const rentalRequestRoutes = route;
