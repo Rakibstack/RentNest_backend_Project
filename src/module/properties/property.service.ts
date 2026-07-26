@@ -177,7 +177,6 @@ const getAllProperties = async (query: IpropertyQuery) => {
 };
 
 const getSingleProperty = async (propertyId: string) => {
-
   const property = prisma.property.findFirstOrThrow({
     where: {
       id: propertyId,
@@ -191,8 +190,9 @@ const getSingleProperty = async (propertyId: string) => {
       },
     },
   });
-  return property
+  return property;
 };
+
 
 export const propertyService = {
   createPropertiesIntoDB,
@@ -200,5 +200,5 @@ export const propertyService = {
   deletePropertyIntoDB,
   setPropertyStatus,
   getAllProperties,
-  getSingleProperty
+  getSingleProperty,
 };

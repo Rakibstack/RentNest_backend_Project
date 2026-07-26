@@ -7,6 +7,7 @@ import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { userRoutes } from "./module/user/user.route";
 import { authRoutes } from "./module/auth/auth.route";
 import { propertyRoutes } from "./module/properties/property.route";
+import { categoryRoute } from "./module/category/category.route";
 
 const app: Application = expess();
 
@@ -26,6 +27,7 @@ app.use('/api/auth',userRoutes)
 app.use('/api/auth',authRoutes)
 app.use('/api/landlord',propertyRoutes)
 app.use('/api/properties',propertyRoutes)
+app.use('/api/categories',categoryRoute)
 
 
 app.use(notFoundRoute) 
