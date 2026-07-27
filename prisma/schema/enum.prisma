@@ -25,3 +25,13 @@ enum RentalRequestStatus {
 
     COMPLETED
 }
+enum PaymentProvider {
+  STRIPE
+  SSLCOMMERZ
+}
+
+enum PaymentStatus {
+    PENDING
+    PAID
+    FAILED
+}

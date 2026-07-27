@@ -1,0 +1,19 @@
+model Payment {
+    id String @id @default(uuid())
+
+    rentalRequestId String        @unique
+    rentalRequest   RentalRequest @relation(fields: [rentalRequestId], references: [id])
+
+    transactionId     String? @unique
+    checkoutSessionId String? @unique
+
+    amount   Int
+    provider PaymentProvider
+    status   PaymentStatus   @default(PENDING)
+    paidAt   DateTime?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("payment")
+}

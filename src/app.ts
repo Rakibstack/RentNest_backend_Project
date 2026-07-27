@@ -9,6 +9,7 @@ import { authRoutes } from "./module/auth/auth.route";
 import { propertyRoutes } from "./module/properties/property.route";
 import { categoryRoute } from "./module/category/category.route";
 import { rentalRequestRoutes } from "./module/rentalRequest/rentalRequest.route";
+import { paymentRoutes } from "./module/payment/payment.route";
 
 const app: Application = expess();
 
@@ -30,6 +31,7 @@ app.use('/api/landlord',propertyRoutes)
 app.use('/api/properties',propertyRoutes)
 app.use('/api/categories',categoryRoute)
 app.use('/api/rentals',rentalRequestRoutes)
+app.use('/api/payments',paymentRoutes)
 
 
 app.use(notFoundRoute) 

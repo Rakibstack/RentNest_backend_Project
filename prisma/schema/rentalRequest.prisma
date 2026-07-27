@@ -9,12 +9,13 @@ model RentalRequest {
     property   Property @relation(fields: [propertyId], references: [id],onDelete: Cascade)
 
     status RentalRequestStatus @default(PENDING)
+    payment  Payment?
     moveInDate DateTime
+    agreedRent Int?
     message  String?   @db.VarChar(255)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     @@unique([tenantId,propertyId])
-    @@index([tenantId,propertyId])
     @@map("rentalRequests")
 }

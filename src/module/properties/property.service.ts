@@ -233,6 +233,7 @@ const updateRentalRequestStatus = async (
     },
     data: {
       status: payload.status,
+      agreedRent : rentalRequestExists.property.rent
     },
   });
 
