@@ -1,4 +1,7 @@
-import { RentalRequestStatus } from "../../../generated/prisma/enums";
+import {
+  PaymentProvider,
+  RentalRequestStatus,
+} from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
@@ -13,6 +16,7 @@ const createPaymentSession = async (
     },
     include: {
       property: true,
+      author: true,
       payment: true,
     },
   });
@@ -28,6 +32,10 @@ const createPaymentSession = async (
   }
   const amount = rentalRequest.agreedRent ?? rentalRequest.property.rent;
 
+  if (amount <= 0) {
+    throw new Error("Invalid payment amount");
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
@@ -39,18 +47,31 @@ const createPaymentSession = async (
           product_data: {
             name: rentalRequest.property.title,
           },
-          
         },
         quantity: 1,
-
       },
     ],
+    customer_email: rentalRequest.author.email,
+
+    metadata: {
+      rentalRequestId: rentalRequest.id,
+      tenantId: rentalRequest.tenantId,
+    },
     success_url: `${config.app_url}/payment-success`,
-    cancel_url : `${config.app_url}/payment-cancel`
+    cancel_url: `${config.app_url}/payment-cancel`,
+  });
+
+  await prisma.payment.create({
+    data: {
+      rentalRequestId: rentalRequest.id,
+      checkoutSessionId: session.id,
+      amount: amount,
+      provider: PaymentProvider.STRIPE,
+    },
   });
 
   return {
-     checkoutUrl : session.url
+    checkoutUrl: session.url,
   };
 };
 
