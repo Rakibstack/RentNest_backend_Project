@@ -1,5 +1,6 @@
 import {
   PaymentProvider,
+  PaymentStatus,
   RentalRequestStatus,
 } from "../../../generated/prisma/enums";
 import config from "../../config";
@@ -27,9 +28,7 @@ const createPaymentSession = async (
   if (rentalRequest.tenantId !== userId) {
     throw new Error("You are not allowed to pay this rental.");
   }
-  if (rentalRequest.payment) {
-    throw new Error("Payment already completed.");
-  }
+
   const amount = rentalRequest.agreedRent ?? rentalRequest.property.rent;
 
   if (amount <= 0) {
@@ -61,20 +60,42 @@ const createPaymentSession = async (
     cancel_url: `${config.app_url}/payment-cancel`,
   });
 
-  await prisma.payment.create({
-    data: {
-      rentalRequestId: rentalRequest.id,
-      checkoutSessionId: session.id,
-      amount: amount,
-      provider: PaymentProvider.STRIPE,
-    },
-  });
+  const existingPayment = rentalRequest.payment;
+
+  if (existingPayment?.status === PaymentStatus.PAID) {
+    throw new Error("Payment already completed.");
+  }
+
+  if (!existingPayment) {
+    await prisma.payment.create({
+      data: {
+        rentalRequestId: rentalRequest.id,
+        checkoutSessionId: session.id,
+        amount: amount,
+        provider: PaymentProvider.STRIPE,
+      },
+    });
+  } else {
+    await prisma.payment.update({
+      where: {
+        id: existingPayment.id,
+      },
+      data: {
+        checkoutSessionId: session.id,
+      },
+    });
+  }
 
   return {
     checkoutUrl: session.url,
   };
 };
 
+ const handleWebhook = async (signature: string,payload :any) => {
+
+ }
+
 export const paymentService = {
   createPaymentSession,
+  handleWebhook
 };

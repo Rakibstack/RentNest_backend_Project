@@ -7,7 +7,6 @@ import httpstatus from "http-status";
 
 const createPaymentSession = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const result = createPaymentValidationSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({
@@ -29,7 +28,21 @@ const createPaymentSession = catchAsync(
     });
   },
 );
+const handleWebhook = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const signature = req.headers["stripe-signature"] as string;
 
- export const paymentController = {
-    createPaymentSession
- }
+    const result = await paymentService.handleWebhook(signature, req.body);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Payment Completed Successfully",
+      data: result,
+    });
+  },
+);
+
+export const paymentController = {
+  createPaymentSession,
+  handleWebhook,
+};
