@@ -35,6 +35,7 @@ export const handleCheckoutSessionCompleted = async (
         paidAt: new Date(),
       },
     });
+    
     await tx.rentalRequest.update({
       where: {
         id: payment.rentalRequestId,

@@ -97,7 +97,7 @@ const createPaymentSession = async (
 
 const handleWebhook = async (signature: string, payload: Buffer) => {
   const endPointSecret = config.stripe_webhook_secret;
-  let event;
+  let event;  
 
   if (endPointSecret) {
     try {
@@ -115,6 +115,7 @@ const handleWebhook = async (signature: string, payload: Buffer) => {
 
     case "checkout.session.completed":
       await handleCheckoutSessionCompleted(event.data.object)
+      
       break;
       
     default:
