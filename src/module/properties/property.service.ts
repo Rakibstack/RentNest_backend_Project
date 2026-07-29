@@ -240,6 +240,9 @@ const updateRentalRequestStatus = async (
   return updateRentalStatus;
 };
 
+
+
+
 export const propertyService = {
   createPropertiesIntoDB,
   updatePropertyIntoDb,

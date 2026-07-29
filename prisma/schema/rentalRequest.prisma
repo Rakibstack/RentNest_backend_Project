@@ -10,6 +10,7 @@ model RentalRequest {
 
     status RentalRequestStatus @default(PENDING)
     payment  Payment?
+    review Review?
     moveInDate DateTime
     agreedRent Int?
     message  String?   @db.VarChar(255)

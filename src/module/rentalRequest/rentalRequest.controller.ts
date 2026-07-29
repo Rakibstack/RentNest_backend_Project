@@ -46,11 +46,28 @@ const getSingleRentalRequest = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const rentalId = req.params?.id as string;
     const result = await rentalRequestService.getSingleRentalRequest(rentalId);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Get Single Rental Request Successfully",
+      data: result,
+    });
+  },
+);
+const updateRentalRequestCompleteStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id as string;
+    const rentalRequestId = req.params?.id as string;
+
+    const result = await rentalRequestService.updateRentalRequestCompleteStatus(
+      userId,
+      rentalRequestId,
+    );
     sendResponse(res,{
-        success: true,
-        statusCode: httpstatus.OK,
-        message: "Get Single Rental Request Successfully",
-        data: result
+      success: true,
+      statusCode: httpstatus.OK,
+      message: 'Rental Request Status Update Successfully',
+      data: result
     })
   },
 );
@@ -58,5 +75,6 @@ const getSingleRentalRequest = catchAsync(
 export const rentalRequestController = {
   createRentalRequest,
   getUserRentalRequest,
-  getSingleRentalRequest
+  getSingleRentalRequest,
+  updateRentalRequestCompleteStatus
 };

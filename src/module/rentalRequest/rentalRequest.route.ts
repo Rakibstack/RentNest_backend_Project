@@ -20,5 +20,10 @@ route.get(
   authMiddleware(Role.TENANT),
   rentalRequestController.getSingleRentalRequest,
 );
+route.patch(
+  "/:id/completed",
+  authMiddleware(Role.LANDLORD),
+  rentalRequestController.updateRentalRequestCompleteStatus,
+);
 
 export const rentalRequestRoutes = route;

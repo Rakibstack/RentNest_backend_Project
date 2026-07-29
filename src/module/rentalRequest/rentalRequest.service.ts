@@ -1,3 +1,4 @@
+import { RentalRequestStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { CreateRentalRequestPayload } from "./rental.validation";
 
@@ -65,8 +66,43 @@ const getSingleRentalRequest = async (rentalId: string) => {
 
   return result;
 };
+const updateRentalRequestCompleteStatus = async (
+  userId: string,
+  rentalRequestId: string,
+) => {
+
+  const rentalRequest = await prisma.rentalRequest.findUniqueOrThrow({
+    where: {
+      id: rentalRequestId
+    },include: {
+      property: true
+    }
+  })
+  if(!rentalRequest){
+    throw new Error('Rental Request Not Found')
+  }
+  if(rentalRequest.property.authorId !== userId){
+    throw new Error('You Are Not The Owner Of This Rental Properties')
+  }
+  if(rentalRequest.status === RentalRequestStatus.COMPLETED){
+    throw new Error('Rental Request Already Completed')
+  }
+  const updateStatus = await prisma.rentalRequest.update({
+    where: {
+      id: rentalRequestId,
+      property:{
+        authorId : userId
+      }
+    },
+    data: {
+      status: RentalRequestStatus.COMPLETED
+    }
+  })
+  return updateStatus;
+};
 export const rentalRequestService = {
   createRentalRequest,
   getUserRentalRequest,
   getSingleRentalRequest,
+  updateRentalRequestCompleteStatus
 };

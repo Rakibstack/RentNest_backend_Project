@@ -11,6 +11,7 @@ import { categoryRoute } from "./module/category/category.route";
 import { rentalRequestRoutes } from "./module/rentalRequest/rentalRequest.route";
 import { paymentRoutes } from "./module/payment/payment.route";
 import { paymentController } from "./module/payment/payment.controller";
+import { reviewRoutes } from "./module/review/review.route";
 
 const app: Application = expess();
 
@@ -41,6 +42,7 @@ app.use("/api/properties", propertyRoutes);
 app.use("/api/categories", categoryRoute);
 app.use("/api/rentals", rentalRequestRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use('/api/reviews',reviewRoutes)
 
 app.use(notFoundRoute);
 app.use(globalErrorHandler);
