@@ -144,8 +144,33 @@ const getUserPaymentHistory = async (userid: string) => {
   return payment;
 };
 
+const getSinglePaymentHistory = async (userId: string, paymentId: string) => {
+  
+  const payment = await prisma.payment.findFirst({
+    where: {
+      id: paymentId,
+      rentalRequest: {
+        tenantId: userId,
+      },
+    },
+    include: {
+      rentalRequest: {
+        include: {
+          property: true,
+        },
+      },
+    },
+  });
+
+  if (!payment) {
+    throw new Error("payment not found");
+  }
+  return payment;
+};
+
 export const paymentService = {
   createPaymentSession,
   handleWebhook,
   getUserPaymentHistory,
+  getSinglePaymentHistory,
 };

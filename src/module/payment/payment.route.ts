@@ -15,5 +15,11 @@ route.get(
   authMiddleware(Role.TENANT),
   paymentController.getUserPaymentHistory,
 );
+route.get(
+  "/:id",
+  authMiddleware(Role.TENANT),
+  paymentController.getSinglePaymentHistory,
+);
+
 
 export const paymentRoutes = route;
