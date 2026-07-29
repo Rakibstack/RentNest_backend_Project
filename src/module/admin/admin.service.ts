@@ -43,11 +43,49 @@ const updateUserStatus = async (
       password: true,
     },
   });
-   return updateUser
+  return updateUser;
+};
+
+const getAllProperties = async () => {
+  const result = await prisma.property.findMany({
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      category: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return result;
+};
+const getAllRentalRequest = async () => {
+  const result = await prisma.rentalRequest.findMany({
+    include: {
+      property: {
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+    return result
 };
 
 export const adminService = {
   getAllUserFromDB,
-  updateUserStatus
+  updateUserStatus,
+  getAllProperties,
+  getAllRentalRequest
 };
-

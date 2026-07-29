@@ -28,16 +28,41 @@ const updateUserStatus = catchAsync(
     }
     const userId = req.params?.id as string;
     const updateUser = await adminService.updateUserStatus(userId, result.data);
-    sendResponse(res,{
-        success: true,
-        statusCode: httpstatus.OK,
-        message: "Update User Status Successfully",
-        data: updateUser
-    })
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Update User Status Successfully",
+      data: updateUser,
+    });
+  },
+);
+
+const getAllProperties = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.getAllProperties();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Retrieves All Properties Successfully",
+      data: result,
+    });
+  },
+);
+const getAllRentalRequest = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.getAllRentalRequest();
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Retrieves All Rental Request Successfully",
+      data: result,
+    });
   },
 );
 
 export const adminController = {
   getAllUser,
-  updateUserStatus
+  updateUserStatus,
+  getAllProperties,
+  getAllRentalRequest,
 };

@@ -11,5 +11,16 @@ route.patch(
   authMiddleware(Role.ADMIN),
   adminController.updateUserStatus,
 );
+route.get(
+  "/properties",
+  authMiddleware(Role.ADMIN),
+  adminController.getAllProperties,
+);
+route.get(
+  "/rentals",
+  authMiddleware(Role.ADMIN),
+  adminController.getAllRentalRequest,
+);
+
 
 export const adminRoutes = route;
