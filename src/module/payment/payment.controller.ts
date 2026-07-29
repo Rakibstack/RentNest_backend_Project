@@ -41,8 +41,22 @@ const handleWebhook = catchAsync(
     });
   },
 );
+const getUserPaymentHistory = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const userId = req.user?.id as string;
+    const result = await paymentService.getUserPaymentHistory(userId)
+    sendResponse(res,{
+      success: true,
+      statusCode: httpstatus.OK,
+      message: 'Retrieve User Payment History Successfully',
+      data: result
+    })
+  },
+);
 
 export const paymentController = {
   createPaymentSession,
   handleWebhook,
+  getUserPaymentHistory
 };

@@ -10,5 +10,10 @@ route.post(
   authMiddleware(Role.TENANT),
   paymentController.createPaymentSession,
 );
+route.get(
+  "/",
+  authMiddleware(Role.TENANT),
+  paymentController.getUserPaymentHistory,
+);
 
- export const paymentRoutes = route
+export const paymentRoutes = route;

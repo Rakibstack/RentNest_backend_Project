@@ -97,7 +97,7 @@ const createPaymentSession = async (
 
 const handleWebhook = async (signature: string, payload: Buffer) => {
   const endPointSecret = config.stripe_webhook_secret;
-  let event;  
+  let event;
 
   if (endPointSecret) {
     try {
@@ -112,18 +112,40 @@ const handleWebhook = async (signature: string, payload: Buffer) => {
   }
 
   switch (event?.type) {
-
     case "checkout.session.completed":
-      await handleCheckoutSessionCompleted(event.data.object)
-      
+      await handleCheckoutSessionCompleted(event.data.object);
+
       break;
-      
+
     default:
-    console.log(`Unhandled event type ${event?.type}.`);
+      console.log(`Unhandled event type ${event?.type}.`);
   }
+};
+
+const getUserPaymentHistory = async (userid: string) => {
+  const payment = await prisma.payment.findMany({
+    where: {
+      rentalRequest: {
+        tenantId: userid,
+      },
+    },
+    include: {
+      rentalRequest: {
+        include: {
+          property: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return payment;
 };
 
 export const paymentService = {
   createPaymentSession,
   handleWebhook,
+  getUserPaymentHistory,
 };
