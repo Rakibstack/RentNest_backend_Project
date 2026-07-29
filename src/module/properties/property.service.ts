@@ -200,7 +200,10 @@ const getAllLandlordPropertyRequest = async (landlordId: string) => {
       property: {
         authorId: landlordId,
       },
-    },
+    },include: {
+      review:true,
+      property:true
+    }
   });
   return result;
 };

@@ -6,6 +6,8 @@ const route = Router()
 
 route.post('/register',userController.createUser)
 route.get('/me',authMiddleware(),userController.getMyProfile)
+route.patch('/me',authMiddleware(),userController.manageUserProfile)
+
 
 
 export const userRoutes = route;
