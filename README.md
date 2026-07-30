@@ -1,10 +1,14 @@
-
 # 🏠 RentNest API
 
 A production-inspired RESTful API for a rental property marketplace built with **Node.js, Express.js, TypeScript, PostgreSQL, Prisma, and Stripe**.
 
 The system enables **Tenants** to discover and rent properties, **Landlords** to manage listings and rental requests, and **Admins** to oversee the entire platform through secure role-based access control.
 
+---
+## 📌 API Documentation
+
+- 📮 Postman Collection : https://documenter.getpostman.com/view/55418716/2sBY4SNeoZ
+- 🌐 Live Link: https://rent-nest-backend-project.vercel.app
 ---
 
 ## 🚀 Tech Stack
@@ -61,11 +65,6 @@ Instead of building simple CRUD APIs, this project implements real-world backend
 - User Profile
 - Admin
 
-## 📌 API Documentation
-
-- 📮 Postman Collection
-- 🌐 Live API
-- 🎥 Demo Video
 
 ---
 

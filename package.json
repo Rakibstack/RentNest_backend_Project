@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "tsup",
     "start": "node dist/server.js",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/api/payments/confirm",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -37,6 +37,7 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
     "stripe": "^22.3.2",
+    "tsup": "^8.5.1",
     "zod": "^4.4.3"
   }
 }

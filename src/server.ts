@@ -8,10 +8,10 @@ try {
   console.log("Database Connect Successfully");
 
   app.listen(config.port, () => {
-    console.log(`Server Is Running On Port : ${config.port} `);
+    console.log(`Server is Running On Port : ${config.port} `);
   });
 } catch (error) {
-  console.log("error starting the server", error);
+  console.error(" Failed to start the server:", error);
   await prisma.$disconnect();
   process.exit(1);
 }

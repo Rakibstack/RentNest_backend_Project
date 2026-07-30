@@ -2,11 +2,11 @@ model Review {
     id String @id @default(uuid())
 
     rentalRequestId String        @unique
-    rentalRequest   RentalRequest @relation(fields: [rentalRequestId], references: [id])
+    rentalRequest   RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
     rating          Int?
-    comment String @db.Text
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    comment         String        @db.Text
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
 
     @@map("reviews")
 }
